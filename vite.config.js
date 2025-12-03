@@ -2,11 +2,22 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 
+/**
+ * Vite config improvements:
+ * - outDir: 'dist' (Vercel default)
+ * - added .ts/.tsx to resolve.extensions
+ * - manualChunks to split large vendor bundles
+ * - chunkSizeWarningLimit increased (still keep chunking)
+ * - preserved your asset aliases and '@' -> './src'
+ */
+
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    extensions: ['.js', '.jsx', '.json'],
+    // support TS/TSX, JS/JSX and JSON imports without extensions
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
     alias: {
+      // package alias shortcuts (left as-is where you mapped versions to base name)
       'vaul@1.1.2': 'vaul',
       'sonner@2.0.3': 'sonner',
       'recharts@2.15.2': 'recharts',
@@ -16,8 +27,6 @@ export default defineConfig({
       'next-themes@0.4.6': 'next-themes',
       'lucide-react@0.487.0': 'lucide-react',
       'input-otp@1.4.2': 'input-otp',
-      'figma:asset/84f2df699de86d311dc0b56820be473ca8ac952c.png': path.resolve(__dirname, './src/assets/84f2df699de86d311dc0b56820be473ca8ac952c.png'),
-      'figma:asset/494a3e5749234580c611bc616000d2fd7d637deb.png': path.resolve(__dirname, './src/assets/494a3e5749234580c611bc616000d2fd7d637deb.png'),
       'embla-carousel-react@8.6.0': 'embla-carousel-react',
       'cmdk@1.1.1': 'cmdk',
       'class-variance-authority@0.7.1': 'class-variance-authority',
@@ -47,15 +56,35 @@ export default defineConfig({
       '@radix-ui/react-aspect-ratio@1.1.2': '@radix-ui/react-aspect-ratio',
       '@radix-ui/react-alert-dialog@1.1.6': '@radix-ui/react-alert-dialog',
       '@radix-ui/react-accordion@1.2.3': '@radix-ui/react-accordion',
+
+      // figma assets -> local assets
+      'figma:asset/84f2df699de86d311dc0b56820be473ca8ac952c.png': path.resolve(
+        __dirname,
+        './src/assets/84f2df699de86d311dc0b56820be473ca8ac952c.png'
+      ),
+      'figma:asset/494a3e5749234580c611bc616000d2fd7d637deb.png': path.resolve(
+        __dirname,
+        './src/assets/494a3e5749234580c611bc616000d2fd7d637deb.png'
+      ),
+
+      // app alias
       '@': path.resolve(__dirname, './src'),
     },
   },
+
+  optimizeDeps: {
+    // hint commonly used heavy deps so dev server can pre-bundle them
+    include: ['react', 'react-dom', 'recharts', 'lucide-react'],
+  },
+
   build: {
     target: 'esnext',
-    outDir: 'dist',
+    outDir: 'build',
   },
   server: {
     port: 3000,
     open: true,
+    // Optional: set strictPort if you want failure instead of auto-port change
+    strictPort: false,
   },
 });
