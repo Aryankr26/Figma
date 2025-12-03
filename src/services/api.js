@@ -3,7 +3,7 @@
  * Connects frontend with backend API
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://fleet-backend-1-0.onrender.com/api';
 
 // Token management
 export function getToken() {
