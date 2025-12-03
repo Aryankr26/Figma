@@ -3,21 +3,60 @@ import { Button } from '../ui/button.jsx';
 import { Input } from '../ui/input.jsx';
 import { Label } from '../ui/label.jsx';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card.jsx';
-import { Truck } from 'lucide-react';
+import { Truck, Loader2, AlertCircle } from 'lucide-react';
+import { login as apiLogin } from '../../services/api';
 
 export function LoginPage({ onLogin }) {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [useDemo, setUseDemo] = useState(true); // Toggle between demo and API mode
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Mock login - owner credentials: owner/owner, supervisor: supervisor/supervisor
-    if (username === 'owner' && password === 'owner') {
-      onLogin('owner');
-    } else if (username === 'supervisor' && password === 'supervisor') {
-      onLogin('supervisor');
+    setError('');
+    setLoading(true);
+
+    // Demo mode - for quick testing without backend
+    if (useDemo) {
+      setTimeout(() => {
+        if (email === 'owner@fleet.com' && password === 'password123') {
+          onLogin('owner');
+        } else if (email === 'supervisor@fleet.com' && password === 'password123') {
+          onLogin('supervisor');
+        } else if (email === 'owner' && password === 'owner') {
+          onLogin('owner');
+        } else if (email === 'supervisor' && password === 'supervisor') {
+          onLogin('supervisor');
+        } else {
+          setError('Invalid credentials. Check demo credentials below.');
+        }
+        setLoading(false);
+      }, 500);
+      return;
+    }
+
+    // API mode - connect to backend
+    try {
+      const response = await apiLogin(email, password);
+      if (response.user) {
+        onLogin(response.user.role || 'supervisor');
+      }
+    } catch (err) {
+      setError(err.message || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fillDemoCredentials = (role) => {
+    if (role === 'owner') {
+      setEmail('owner@fleet.com');
+      setPassword('password123');
     } else {
-      alert('Invalid credentials. Try:\nOwner: owner/owner\nSupervisor: supervisor/supervisor');
+      setEmail('supervisor@fleet.com');
+      setPassword('password123');
     }
   };
 
@@ -37,14 +76,23 @@ export function LoginPage({ onLogin }) {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="flex items-center gap-2 p-3 text-sm text-red-600 bg-red-50 rounded-lg border border-red-200">
+                <AlertCircle className="h-4 w-4" />
+                {error}
+              </div>
+            )}
+            
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
-                id="username"
-                placeholder="Enter username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                id="email"
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="bg-slate-50"
+                required
               />
             </div>
             <div className="space-y-2">
@@ -56,15 +104,62 @@ export function LoginPage({ onLogin }) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="bg-slate-50"
+                required
               />
             </div>
-            <Button type="submit" className="w-full bg-[#0f172a] hover:bg-[#1e293b]">
-              Sign In
+            
+            <Button 
+              type="submit" 
+              className="w-full bg-[#0f172a] hover:bg-[#1e293b]"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
             </Button>
-            <div className="text-xs text-center text-slate-500 mt-4 space-y-1">
-              <p>Demo Credentials:</p>
-              <p>Owner: owner / owner</p>
-              <p>Supervisor: supervisor / supervisor</p>
+            
+            <div className="pt-4 border-t border-slate-200">
+              <p className="text-xs text-center text-slate-500 mb-3">Quick Demo Login:</p>
+              <div className="flex gap-2">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm"
+                  className="flex-1"
+                  onClick={() => fillDemoCredentials('owner')}
+                >
+                  Owner
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm"
+                  className="flex-1"
+                  onClick={() => fillDemoCredentials('supervisor')}
+                >
+                  Supervisor
+                </Button>
+              </div>
+              <p className="text-xs text-center text-slate-400 mt-3">
+                Demo Password: password123
+              </p>
+            </div>
+
+            <div className="flex items-center justify-center gap-2 text-xs text-slate-500">
+              <label className="flex items-center gap-1 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={useDemo}
+                  onChange={(e) => setUseDemo(e.target.checked)}
+                  className="rounded"
+                />
+                Demo Mode (no backend required)
+              </label>
             </div>
           </form>
         </CardContent>
