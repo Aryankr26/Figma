@@ -11,7 +11,7 @@ export function LoginPage({ onLogin }) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [useDemo, setUseDemo] = useState(true); // Toggle between demo and API mode
+  const [useDemo, setUseDemo] = useState(false); // Default to API mode
 
   const handleSubmit = async (e) => {
     e.preventDefault();
