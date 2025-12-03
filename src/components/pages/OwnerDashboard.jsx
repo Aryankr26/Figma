@@ -18,32 +18,16 @@ import {
   Receipt,
   Fuel,
   CircleDot,
-  ZoomIn,
-  ZoomOut,
-  Maximize2,
   Map as MapIcon,
 } from 'lucide-react';
-import mapImage from 'figma:asset/494a3e5749234580c611bc616000d2fd7d637deb.png';
 import { motion, AnimatePresence } from 'motion/react';
+import { VehicleMap } from '../map/VehicleMap.jsx';
 
 export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
   const [activeTab, setActiveTab] = useState('live');
   const [selectedVehicle, setSelectedVehicle] = useState(null);
-  const [mapZoom, setMapZoom] = useState(1);
   const [detailVehicle, setDetailVehicle] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all');
-
-  const handleZoomIn = () => {
-    setMapZoom((prev) => Math.min(prev + 0.2, 3));
-  };
-
-  const handleZoomOut = () => {
-    setMapZoom((prev) => Math.max(prev - 0.2, 0.5));
-  };
-
-  const handleResetZoom = () => {
-    setMapZoom(1);
-  };
 
   const vehicles = [
     {
@@ -54,6 +38,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Active',
       speed: 42,
       position: { top: '35%', left: '44%' },
+      lat: 28.4595,
+      lng: 77.0266,
       rotation: 45,
       address: 'Sector 18, Gurugram, Haryana',
       lastUpdated: '2 mins ago',
@@ -80,6 +66,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Stopped',
       speed: 0,
       position: { top: '40%', left: '50%' },
+      lat: 28.4289,
+      lng: 77.0319,
       rotation: 0,
       address: 'IFFCO Chowk, Gurugram, Haryana',
       lastUpdated: '15 mins ago',
@@ -106,6 +94,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Idle',
       speed: 0,
       position: { top: '38%', left: '54%' },
+      lat: 28.4744,
+      lng: 77.5040,
       rotation: 180,
       address: 'Greater Noida Industrial Area, UP',
       lastUpdated: '5 mins ago',
@@ -132,6 +122,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Active',
       speed: 38,
       position: { top: '52%', left: '38%' },
+      lat: 22.6243,
+      lng: 75.5632,
       rotation: 270,
       address: 'Pithampur Industrial Area, MP',
       lastUpdated: '1 min ago',
@@ -158,6 +150,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Stopped',
       speed: 0,
       position: { top: '65%', left: '48%' },
+      lat: 18.6298,
+      lng: 73.7997,
       rotation: 0,
       address: 'Pune Industrial Estate, MH',
       lastUpdated: '8 mins ago',
@@ -184,6 +178,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Active',
       speed: 45,
       position: { top: '33%', left: '46%' },
+      lat: 28.3588,
+      lng: 76.9340,
       rotation: 90,
       address: 'Manesar Industrial Hub, Haryana',
       lastUpdated: '3 mins ago',
@@ -210,6 +206,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Idle',
       speed: 0,
       position: { top: '62%', left: '52%' },
+      lat: 18.9432,
+      lng: 72.8356,
       rotation: 45,
       address: 'Mumbai Port Area, MH',
       lastUpdated: '12 mins ago',
@@ -236,6 +234,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Active',
       speed: 51,
       position: { top: '36%', left: '52%' },
+      lat: 28.6263,
+      lng: 77.3733,
       rotation: 135,
       address: 'Noida Sector 62, UP',
       lastUpdated: '1 min ago',
@@ -262,6 +262,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Stopped',
       speed: 0,
       position: { top: '48%', left: '40%' },
+      lat: 22.7196,
+      lng: 75.8577,
       rotation: 0,
       address: 'Indore IT Park, MP',
       lastUpdated: '20 mins ago',
@@ -288,6 +290,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Idle',
       speed: 0,
       position: { top: '34%', left: '42%' },
+      lat: 28.5355,
+      lng: 77.3910,
       rotation: 225,
       address: 'Delhi-Jaipur Highway, Haryana',
       lastUpdated: '6 mins ago',
@@ -314,6 +318,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Active',
       speed: 39,
       position: { top: '58%', left: '45%' },
+      lat: 19.9975,
+      lng: 73.7898,
       rotation: 315,
       address: 'Nashik Industrial Area, MH',
       lastUpdated: '4 mins ago',
@@ -340,6 +346,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Stopped',
       speed: 0,
       position: { top: '42%', left: '56%' },
+      lat: 26.8467,
+      lng: 80.9462,
       rotation: 0,
       address: 'Lucknow Transport Hub, UP',
       lastUpdated: '10 mins ago',
@@ -366,6 +374,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Active',
       speed: 47,
       position: { top: '55%', left: '42%' },
+      lat: 23.2599,
+      lng: 77.4126,
       rotation: 180,
       address: 'Bhopal Industrial Corridor, MP',
       lastUpdated: '2 mins ago',
@@ -392,6 +402,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Idle',
       speed: 0,
       position: { top: '37%', left: '48%' },
+      lat: 28.4089,
+      lng: 77.3178,
       rotation: 90,
       address: 'Faridabad Industrial Area, Haryana',
       lastUpdated: '7 mins ago',
@@ -418,6 +430,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Active',
       speed: 44,
       position: { top: '60%', left: '49%' },
+      lat: 19.2183,
+      lng: 72.9781,
       rotation: 270,
       address: 'Thane Industrial Zone, MH',
       lastUpdated: '3 mins ago',
@@ -444,6 +458,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Active',
       speed: 52,
       position: { top: '71%', left: '55%' },
+      lat: 13.0827,
+      lng: 80.2707,
       rotation: 135,
       address: 'Chennai Port Area, TN',
       lastUpdated: '1 min ago',
@@ -470,6 +486,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Stopped',
       speed: 0,
       position: { top: '68%', left: '42%' },
+      lat: 12.9716,
+      lng: 77.5946,
       rotation: 0,
       address: 'Bangalore Tech Park, KA',
       lastUpdated: '18 mins ago',
@@ -496,6 +514,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Idle',
       speed: 0,
       position: { top: '44%', left: '34%' },
+      lat: 26.9124,
+      lng: 75.7873,
       rotation: 225,
       address: 'Jaipur Industrial Zone, RJ',
       lastUpdated: '9 mins ago',
@@ -522,6 +542,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Active',
       speed: 48,
       position: { top: '54%', left: '28%' },
+      lat: 23.0225,
+      lng: 72.5714,
       rotation: 315,
       address: 'Ahmedabad Export Zone, GJ',
       lastUpdated: '2 mins ago',
@@ -548,6 +570,8 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
       statusText: 'Stopped',
       speed: 0,
       position: { top: '32%', left: '47%' },
+      lat: 28.7041,
+      lng: 77.1025,
       rotation: 0,
       address: 'Delhi Logistics Hub, DL',
       lastUpdated: '25 mins ago',
@@ -629,55 +653,13 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
   return (
     <div className="relative w-full h-screen overflow-hidden">
       {/* Map Background */}
-      <div className="absolute inset-y-0 left-0 right-[340px] overflow-hidden cursor-grab active:cursor-grabbing">
-        <img
-          src={mapImage}
-          alt="Fleet Map"
-          className="w-full h-full object-cover transition-transform duration-300 ease-out"
-          style={{ transform: `scale(${mapZoom})` }}
-          draggable={false}
+      <div className="absolute inset-y-0 left-0 right-[340px] overflow-hidden">
+        {/* Real Leaflet Map */}
+        <VehicleMap 
+          vehicles={filteredVehicles} 
+          onVehicleClick={(vehicle) => setSelectedVehicle(vehicle)}
+          selectedVehicleId={selectedVehicle?.id}
         />
-
-        {/* Cluster Marker */}
-        <div
-          className="absolute cursor-pointer hover:scale-105 transition-transform"
-          style={{
-            top: '34%',
-            left: '43%',
-            transform: 'translate(-50%, -50%)',
-          }}
-        >
-          <div
-            className="relative flex items-center justify-center rounded-full"
-            style={{
-              width: '58px',
-              height: '58px',
-              backgroundColor: '#1565C0',
-              boxShadow: '0 4px 12px rgba(13, 71, 161, 0.35), 0 2px 6px rgba(0, 0, 0, 0.15)',
-            }}
-          >
-            <div
-              className="flex items-center justify-center rounded-full"
-              style={{
-                width: '48px',
-                height: '48px',
-                backgroundColor: '#1976D2',
-              }}
-            >
-              <span
-                style={{
-                  color: '#FFFFFF',
-                  fontSize: '20px',
-                  fontWeight: 700,
-                  fontFamily: 'Inter',
-                  letterSpacing: '0.02em',
-                }}
-              >
-                20
-              </span>
-            </div>
-          </div>
-        </div>
 
         {/* Status Filter Bar */}
         <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-20">
@@ -803,77 +785,6 @@ export function OwnerDashboard({ onNavigate, selectedVehicleId }) {
             </div>
           </div>
         </div>
-
-        {/* Zoom Controls */}
-        <div className="absolute bottom-8 right-8 flex flex-col gap-2 z-20">
-          <button
-            onClick={handleZoomIn}
-            className="w-12 h-12 bg-white hover:bg-slate-50 rounded-lg shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95"
-            title="Zoom In"
-          >
-            <ZoomIn className="w-5 h-5 text-slate-700" />
-          </button>
-          <button
-            onClick={handleResetZoom}
-            className="w-12 h-12 bg-white hover:bg-slate-50 rounded-lg shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95"
-            title="Reset Zoom"
-          >
-            <Maximize2 className="w-5 h-5 text-slate-700" />
-          </button>
-          <button
-            onClick={handleZoomOut}
-            className="w-12 h-12 bg-white hover:bg-slate-50 rounded-lg shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95"
-            title="Zoom Out"
-          >
-            <ZoomOut className="w-5 h-5 text-slate-700" />
-          </button>
-          <div className="w-12 bg-white rounded-lg shadow-lg px-2 py-2 text-center">
-            <span className="text-xs text-slate-700">{Math.round(mapZoom * 100)}%</span>
-          </div>
-        </div>
-
-        {/* Vehicle Icons */}
-        {filteredVehicles.map((vehicle) => (
-          <motion.div
-            key={vehicle.id}
-            className="absolute cursor-pointer"
-            style={{
-              top: vehicle.position.top,
-              left: vehicle.position.left,
-              transform: 'translate(-50%, -50%)',
-            }}
-            animate={{
-              top: vehicle.position.top,
-              left: vehicle.position.left,
-            }}
-            transition={{
-              duration: 2,
-              ease: 'linear',
-              repeat: Infinity,
-              repeatType: 'loop',
-            }}
-            whileHover={{ scale: 1.15 }}
-            onClick={() => setSelectedVehicle(vehicle)}
-          >
-            <div
-              className="relative"
-              style={{
-                transform: `rotate(${vehicle.rotation}deg)`,
-                transition: 'transform 0.3s ease',
-              }}
-            >
-              <Navigation
-                className="w-6 h-6 drop-shadow-lg"
-                style={{
-                  color: getStatusColor(vehicle.status),
-                  fill: getStatusColor(vehicle.status),
-                  strokeWidth: 1.5,
-                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
-                }}
-              />
-            </div>
-          </motion.div>
-        ))}
       </div>
 
       {/* Bottom Info Overlay */}
