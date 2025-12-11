@@ -3,7 +3,7 @@ import { LoginPage } from './components/pages/LoginPage.jsx';
 import { DashboardLayout } from './components/DashboardLayout.jsx';
 import { OwnerDashboard } from './components/pages/OwnerDashboard.jsx';
 import { SupervisorDashboard } from './components/pages/SupervisorDashboard.jsx';
-import { GeofencingPage } from './components/pages/GeofencingPage.jsx';
+import { VehicleTracking } from './components/pages/VehicleTracking.jsx';
 import { FuelReports } from './components/pages/FuelReports.jsx';
 import { ComplaintsPanel } from './components/pages/ComplaintsPanel.jsx';
 import { Settings } from './components/pages/Settings.jsx';
@@ -42,7 +42,7 @@ export default function App() {
       case 'dashboard':
         return userRole === 'owner' ? <OwnerDashboard onNavigate={handleNavigate} selectedVehicleId={selectedVehicleId} /> : <SupervisorDashboard onNavigate={handleNavigate} selectedVehicleId={selectedVehicleId} />;
       case 'vehicles':
-        return <GeofencingPage />;
+        return <VehicleTracking />;
       case 'fuel':
         return <FuelReports />;
       case 'complaints':

@@ -27,7 +27,7 @@ export function DashboardLayout({
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'insights', label: 'Insights', icon: BarChart3 },
-    { id: 'vehicles', label: 'Geofencing', icon: Truck },
+    { id: 'vehicles', label: 'Vehicle Tracking', icon: Truck },
     { id: 'fuel', label: 'Fuel Reports', icon: Droplet },
     { id: 'complaints', label: 'Complaints', icon: MessageSquare },
     { id: 'settings', label: 'Settings', icon: SettingsIcon },
